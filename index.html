@@ -1,68 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head><title>circle</title></head>
+    <head><title>Turtle Game</title></head>
     <body>
         <canvas id="canvas" width="500" height="700">
         </canvas>
+        <script src="fallingObjects.js"></script>
+        <script src="player.js"></script>
         <script>
             var canvas = document.getElementById("canvas");
             var ctx = canvas.getContext("2d");
             
-            let playersize = canvas.width/6;
-            let player={x:canvas.width/2, 
-                        y:canvas.height-playersize*1.5, 
-                        size:playersize, 
-                        height: playersize*1.5,
-                        width: playersize,
-                        speed: canvas.width/100,
-                        action:"stay",
-                        score: 0
-                       }
+            var fallingObjects = [];
             
-            let gameState={
+            let gameState = {
                 playerAvatar: "images/avatar.png",
                 backgroundImg: "images/background.png",
                 rasberryImg: "images/rasberry.png",
-                level: 0
+                level: 1
             }
-            
             
             var playerAvatar = new Image();
             playerAvatar.src = gameState.playerAvatar;
             var background = new Image();
-            background.src=gameState.backgroundImg;
-            
-            function drawPlayer(){
-                ctx.beginPath();
-                
-                switch(player.action){
-                    case "moveRight":
-                        player.x+=player.speed;
-                        break;
-                    case "moveLeft":
-                        player.x-=player.speed;
-                        break;
-                }
-                
-                if(player.x>canvas.width-player.size)
-                    player.x =canvas.width-player.size;
-                if(player.x<0)
-                    player.x =0;
-
-
-                ctx.drawImage(playerAvatar, player.x, player.y, player.width, player.height);
-            }
-            
-            
+            background.src = gameState.backgroundImg;
+            var rasberry = new Image();
+            rasberry.src = gameState.rasberryImg;
             
             function drawBackground()
             {
-                ctx.beginPath();
-                ctx.fillStyle = "black";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.closePath();  
-                ctx.fill();
-                
                 ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
             }
             
@@ -73,6 +38,7 @@
                 ctx.fillText("Score: "+player.score,6,canvas.height-40,);
                 ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
             }
+            
             function checkInput()
             {
                 document.addEventListener('keydown', (event) => {
@@ -102,11 +68,22 @@
               });
             }
             
+            var r1= new PositiveObject(50,50,canvas.width/6,canvas.height/10,100,1);
+            var r1= new PositiveObject(100,50,canvas.width/6,canvas.height/10,100,1);
+            fallingObjects.push(r1);
+            fallingObjects.push(r2);
+            function drawFO()
+            {
+                fallingObjects.forEach(element => element.drawFallingObject);
+                //r1.drawFallingObject();
+            }
+            
             const draw = () => {
                 checkInput();
                 drawBackground();
                 drawPlayer();
                 displayInfo();
+                drawFO();
                 window.requestAnimationFrame(draw);
             }
             draw();

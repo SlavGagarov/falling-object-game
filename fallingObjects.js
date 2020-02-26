@@ -6,6 +6,7 @@ class  PositiveObject{
     this.height=h;
     this.pointValue = pValue;
     this.speed=speed;
+    this.imgSrc = src;
     this.alive = true;
   }
     

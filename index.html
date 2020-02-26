@@ -68,13 +68,13 @@
               });
             }
             
-            var r1= new PositiveObject(50,50,canvas.width/6,canvas.height/10,100,1);
-            var r1= new PositiveObject(100,50,canvas.width/6,canvas.height/10,100,1);
+            var r1= new PositiveObject(50,50,canvas.width/6,canvas.height/10,100,1,rasberry);
+            var r2= new PositiveObject(100,50,canvas.width/6,canvas.height/10,100,1,rasberry);
             fallingObjects.push(r1);
             fallingObjects.push(r2);
             function drawFO()
             {
-                fallingObjects.forEach(element => element.drawFallingObject);
+                fallingObjects.forEach(element => element.drawFallingObject());
                 //r1.drawFallingObject();
             }
             

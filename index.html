@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head><title>circle</title></head>
+    <body>
+        <canvas id="canvas" width="500" height="700">
+        </canvas>
+        <script>
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            
+            let playersize = canvas.width/6;
+            let player={x:canvas.width/2, 
+                        y:canvas.height-playersize*1.5, 
+                        size:playersize, 
+                        height: playersize*1.5,
+                        width: playersize,
+                        speed: canvas.width/100,
+                        action:"stay",
+                        score: 0
+                       }
+            
+            let gameState={
+                playerAvatar: "images/avatar.png",
+                backgroundImg: "images/background.png",
+                rasberryImg: "images/rasberry.png",
+                level: 0
+            }
+            
+            
+            var playerAvatar = new Image();
+            playerAvatar.src = gameState.playerAvatar;
+            var background = new Image();
+            background.src=gameState.backgroundImg;
+            
+            function drawPlayer(){
+                ctx.beginPath();
+                
+                switch(player.action){
+                    case "moveRight":
+                        player.x+=player.speed;
+                        break;
+                    case "moveLeft":
+                        player.x-=player.speed;
+                        break;
+                }
+                
+                if(player.x>canvas.width-player.size)
+                    player.x =canvas.width-player.size;
+                if(player.x<0)
+                    player.x =0;
+
+
+                ctx.drawImage(playerAvatar, player.x, player.y, player.width, player.height);
+            }
+            
+            
+            
+            function drawBackground()
+            {
+                ctx.beginPath();
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.closePath();  
+                ctx.fill();
+                
+                ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+            }
+            
+            function displayInfo()
+            {
+                ctx.font = "bold 25px bold Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText("Score: "+player.score,6,canvas.height-40,);
+                ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
+            }
+            function checkInput()
+            {
+                document.addEventListener('keydown', (event) => {
+                switch(event.keyCode) {
+                    case 37:
+                    case 65:
+                    player.action="moveLeft";
+                    break;
+                  case 39:
+                  case 68:
+                    player.action="moveRight";
+                    break;
+                }
+              });
+                
+              document.addEventListener('keyup', (event) => {
+                switch(event.keyCode) {
+                  case 37:
+                  case 65:
+                    player.action="stay";
+                    break;
+                  case 39:      
+                  case 68:
+                      player.action="stay";
+                    break;
+                }
+              });
+            }
+            
+            const draw = () => {
+                checkInput();
+                drawBackground();
+                drawPlayer();
+                displayInfo();
+                window.requestAnimationFrame(draw);
+            }
+            draw();
+
+        </script>
+    </body>
+</html>

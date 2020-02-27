@@ -17,6 +17,8 @@
                 playerAvatar: "images/avatar.png",
                 backgroundImg: "images/background.png",
                 rasberryImg: "images/rasberry.png",
+                hearthImg: "images/hearth.png",
+                rockImg: "images/rock.png",
                 level: 1
             }
             
@@ -26,6 +28,10 @@
             background.src = gameState.backgroundImg;
             var rasberry = new Image();
             rasberry.src = gameState.rasberryImg;
+            var hearth = new Image();
+            hearth.src = gameState.hearthImg;
+            var rock = new Image();
+            rock.src = gameState.rockImg;
             
             function drawBackground()
             {
@@ -38,16 +44,19 @@
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: "+player.score,6,canvas.height-40,);
                 ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
+                for(var i=0; i<player.lives; i++){
+                	 ctx.drawImage(hearth, (canvas.width-canvas.width/15)-i*canvas.width/15, canvas.height-canvas.height/20, canvas.width/15, canvas.height/20);
+                }
             }
             
             var left = false;
-    		var right = false;
+    				var right = false;
             function checkInput()
             {
                 document.addEventListener('keydown', (event) => {
                 switch(event.keyCode) {
-                    case 37:
-                    case 65:
+                	case 37:
+                	case 65:
                     player.action="moveLeft";
                     left=true;
                     break;
@@ -94,6 +103,14 @@
               															canvas.width/10,canvas.height/13,
               															100,gameState.level*2,
               															rasberry, idCounter);
+              	fallingObjects.push(r1);
+              	idCounter++;
+            	}
+            	if(rnd>=11*Math.pow(2,gameState.level) && rnd<=15*Math.pow(2,gameState.level)){
+            		var r1= new NegativeObject(	randomX,0,
+              															canvas.width/10,canvas.height/13,
+              															gameState.level*2,
+              															rock, idCounter);
               	fallingObjects.push(r1);
               	idCounter++;
             	}

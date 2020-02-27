@@ -27,13 +27,13 @@ class  FallingObject{
   
   
   checkPlayerCollisions(){
-	var pX=player.x+player.width*0.6;
-	var pW=player.width*0.05;
+	var pX=player.x+player.width*0.4;
+	var pW=player.width*0.2;
 	var pY=player.y;
-	var pH=player.height;
+	var pH=player.height*0.8;
   
-	var tX=this.x;// + 10;
-	var tW=this.width;// - 10;
+	var tX=this.x;
+	var tW=this.width;
 	var tY=this.y;
 	var tH=this.height;
   	if(pX < tX + tW &&
@@ -63,6 +63,6 @@ class NegativeObject extends FallingObject{
   }
   
   onCollision() {
-  	//play.lives--;
+  	player.lives--;
   }
 }

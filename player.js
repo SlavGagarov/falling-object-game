@@ -8,7 +8,8 @@ let player = {
     width: playersize,
     speed: canvas.width / 100,
     action: "stay",
-    score: 0
+    score: 0,
+
 }
 
 function drawPlayer() {

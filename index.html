@@ -40,6 +40,8 @@
                 ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
             }
             
+            var left = false;
+    				var right = false;
             function checkInput()
             {
                 document.addEventListener('keydown', (event) => {
@@ -47,10 +49,12 @@
                     case 37:
                     case 65:
                     player.action="moveLeft";
+                    left=true;
                     break;
                   case 39:
                   case 68:
                     player.action="moveRight";
+                    right = true;
                     break;
                 }
               });
@@ -59,11 +63,23 @@
                 switch(event.keyCode) {
                   case 37:
                   case 65:
-                    player.action="stay";
+                    left=false;
+                    if(right){
+                    	player.action="moveRight";
+                    }
+                    else{
+                    	player.action="stay";
+                    }
                     break;
                   case 39:      
                   case 68:
-                      player.action="stay";
+                  right=false;
+                   if(left){
+                    	player.action="moveLeft";
+                    }
+                    else{
+                    	player.action="stay";
+                    }
                     break;
                 }
               });

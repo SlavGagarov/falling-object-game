@@ -11,6 +11,7 @@
             var ctx = canvas.getContext("2d");
             
             var fallingObjects = [];
+            var idCounter=0;
             
             let gameState = {
                 playerAvatar: "images/avatar.png",
@@ -68,21 +69,57 @@
               });
             }
             
-            var r1= new PositiveObject(50,50,canvas.width/6,canvas.height/10,100,1,rasberry);
-            var r2= new PositiveObject(100,50,canvas.width/6,canvas.height/10,100,1,rasberry);
-            fallingObjects.push(r1);
-            fallingObjects.push(r2);
-            function drawFO()
+            function spawnFO()
             {
-                fallingObjects.forEach(element => element.drawFallingObject());
-                //r1.drawFallingObject();
+            	var rnd = Math.floor(Math.random() * 600)+1;
+            	var randomX = Math.floor(Math.random() * (canvas.width-canvas.width/10));
+            	if(rnd>=0 && rnd<=10*gameState.level){
+              	var r1= new PositiveObject(	randomX,0,
+              															canvas.width/10,canvas.height/13,
+              															100,gameState.level*2,
+              															rasberry, idCounter);
+              	fallingObjects.push(r1);
+              	idCounter++;
+            	}
             }
             
+            
+            function drawFO()
+            {
+                fallingObjects.forEach(element => {
+                	if(element.alive)
+                		element.drawFallingObject();
+         	       	else{
+										var eID = element.id;
+										fallingObjects = fallingObjects.filter(e => e.id != eID);
+										}
+                });   
+            }
+            
+            function collisionChecker(){
+            	fallingObjects.forEach(element => element.checkPlayerCollisions());
+            }
+            
+        		function checkLevel(){
+        			switch(true) {
+        				case player.score < 1000:
+        					gameState.level=1;
+        					break;
+        				case player.score < 2000:
+        					gameState.level=2;
+        					break;
+        				case player.score >= 3000:
+        					gameState.level=3;
+        			}
+        		}
             const draw = () => {
+            		checkLevel();
+                collisionChecker();
                 checkInput();
                 drawBackground();
                 drawPlayer();
                 displayInfo();
+                spawnFO();
                 drawFO();
                 window.requestAnimationFrame(draw);
             }

@@ -9,10 +9,10 @@ let player = {
     speed: canvas.width / 100,
     action: "stay",
     score: 0,
-	 lives: 3
+	lives: 3
 }
 
-function drawPlayer() {
+const drawPlayer = () => {
     ctx.beginPath();
     switch(player.action) {
         case "moveRight":

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Turtle Game</title></head>
+    <body>
+        <canvas id="canvas" width="500" height="700">
+        </canvas>
+        <script src="fallingObjects.js"></script>
+        <script src="player.js"></script>
+        
+        <script>
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            
+            var txtSize = canvas.width/20;
+            ctx.font = "bold "+txtSize+"px bold Arial";
+            
+            var fallingObjects = [];
+            var idCounter=0;
+            
+            let gameState = {
+                playerAvatar: "images/avatar.png",
+                backgroundImg: "images/background.png",
+                rasberryImg: "images/rasberry.png",
+                hearthImg: "images/hearth.png",
+                rockImg: "images/rock.png",
+                level: 1
+            }
+            
+            var playerAvatar = new Image();
+            playerAvatar.src = gameState.playerAvatar;
+            var background = new Image();
+            background.src = gameState.backgroundImg;
+            var rasberry = new Image();
+            rasberry.src = gameState.rasberryImg;
+            var hearth = new Image();
+            hearth.src = gameState.hearthImg;
+            var rock = new Image();
+            rock.src = gameState.rockImg;
+            
+            function drawBackground()
+            {
+                ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+            }
+            
+            const displayInfo = () =>
+            {
+                ctx.fillStyle = "white";
+                ctx.fillText("Score: "+player.score,6,canvas.height-40,);
+                ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
+                for(var i=0; i<player.lives; i++){
+                	 ctx.drawImage(hearth, (canvas.width-canvas.width/15)-i*canvas.width/15, canvas.height-canvas.height/20, canvas.width/15, canvas.height/20);
+                }
+            }
+            
+            var left = false;
+    		var right = false;
+            
+            const checkInput = () =>
+            {
+                document.addEventListener('keydown', (event) => {
+                switch(event.keyCode) {
+                	case 37:
+                	case 65:
+                    player.action="moveLeft";
+                    left=true;
+                    break;
+                  case 39:
+                  case 68:
+                    player.action="moveRight";
+                    right = true;
+                    break;
+                }
+              });
+                
+              document.addEventListener('keyup', (event) => {
+                switch(event.keyCode) {
+                  case 37:
+                  case 65:
+                    left=false;
+                    if(right){
+                    	player.action="moveRight";
+                    }
+                    else{
+                    	player.action="stay";
+                    }
+                    break;
+                  case 39:      
+                  case 68:
+                  right=false;
+                   if(left){
+                    	player.action="moveLeft";
+                    }
+                    else{
+                    	player.action="stay";
+                    }
+                    break;
+                }
+              });
+            }
+            
+            const spawnFO = () =>
+            {
+            	var rnd = Math.floor(Math.random() * 600)+1;
+            	var randomX = Math.floor(Math.random() * (canvas.width-canvas.width/10));
+            	if(rnd>=0 && rnd<=10*gameState.level){
+              	var r1= new PositiveObject(	randomX,0,
+              															canvas.width/10,canvas.height/13,
+              															100,gameState.level*2,
+              															rasberry, idCounter);
+              	fallingObjects.push(r1);
+              	idCounter++;
+            	}
+            	if(rnd>=11*Math.pow(2,gameState.level) && rnd<=15*Math.pow(2,gameState.level)){
+            		var r1= new NegativeObject(	randomX,0,
+              															canvas.width/10,canvas.height/13,
+              															gameState.level*2,
+              															rock, idCounter);
+              	fallingObjects.push(r1);
+              	idCounter++;
+            	}
+            }
+            
+            
+            const drawFO = () =>
+            {
+                fallingObjects.forEach(element => {
+                	if(element.alive)
+                		element.drawFallingObject();
+         	       	else{
+										var eID = element.id;
+										fallingObjects = fallingObjects.filter(e => e.id != eID);
+										}
+                });   
+            }
+            
+            const collisionChecker = () => {
+            	fallingObjects.forEach(element => element.checkPlayerCollisions());
+            }
+            
+        		function checkLevel(){
+        			switch(true) {
+        				case player.score < 1000:
+        					gameState.level=1;
+        					break;
+        				case player.score < 2000:
+        					gameState.level=2;
+        					break;
+        				case player.score >= 3000:
+        					gameState.level=3;
+        			}
+        		}
+            const drawEndScreen = () => {
+                drawBackground();
+                
+                ctx.font = "bold "+txtSize*2+"px"+" Arial";
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                ctx.fillText("You Are Dead :(",canvas.width/2,canvas.height/2);
+                ctx.fillText("Score: "+player.score,canvas.width/2,canvas.height*0.6);
+                ctx.strokeStyle = "white";
+                ctx.strokeText("You Are Dead :(",canvas.width/2,canvas.height/2);
+                ctx.strokeText("Score: "+player.score,canvas.width/2,canvas.height*0.6);
+            }
+            
+            const endScreen = () => {
+                drawEndScreen();
+           }
+            
+            const draw = () => {
+                if(player.lives>0){
+                    checkLevel();
+                    collisionChecker();
+                    checkInput();
+                    drawBackground();
+                    drawPlayer();
+                    displayInfo();
+                    spawnFO();
+                    drawFO();
+                    window.requestAnimationFrame(draw);
+                }
+                else{
+                    endScreen();
+                }
+                
+            }
+            draw();
+
+        </script>
+    </body>
+</html>

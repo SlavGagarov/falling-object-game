@@ -44,6 +44,9 @@
             
             const displayInfo = () =>
             {
+                ctx.textAlign = 'left';
+                var txtSize = canvas.width/20;
+                ctx.font = "bold "+txtSize+"px bold Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: "+player.score,6,canvas.height-40,);
                 ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
@@ -164,7 +167,23 @@
             
             const endScreen = () => {
                 drawEndScreen();
+                if(checkRestart())
+                    draw();
            }
+            const checkRestart = () => {
+               document.addEventListener('keydown', (event) => {
+                console.log(event.keyCode);
+                if(event.keyCode == 32) {
+                	player.score=0;
+                    player.lives=3;
+                    gameState.level=1;
+                    fallingObjects = [];
+                    return true;
+                }
+                else
+                    return false;
+               });
+            }
             
             const draw = () => {
                 if(player.lives>0){
@@ -180,6 +199,7 @@
                 }
                 else{
                     endScreen();
+                    window.requestAnimationFrame(draw);
                 }
                 
             }

@@ -8,14 +8,14 @@
         <script src="player.js"></script>
         
         <script>
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
             
-            var txtSize = canvas.width/20;
+            let txtSize = canvas.width/20;
             ctx.font = "bold "+txtSize+"px bold Arial";
             
-            var fallingObjects = [];
-            var idCounter=0;
+            let fallingObjects = [];
+            let idCounter=0;
             
             let gameState = {
                 playerAvatar: "images/avatar.png",
@@ -26,15 +26,15 @@
                 level: 1
             }
             
-            var playerAvatar = new Image();
+            let playerAvatar = new Image();
             playerAvatar.src = gameState.playerAvatar;
-            var background = new Image();
+            let background = new Image();
             background.src = gameState.backgroundImg;
-            var rasberry = new Image();
+            let rasberry = new Image();
             rasberry.src = gameState.rasberryImg;
-            var hearth = new Image();
+            let hearth = new Image();
             hearth.src = gameState.hearthImg;
-            var rock = new Image();
+            let rock = new Image();
             rock.src = gameState.rockImg;
             
             function drawBackground()
@@ -45,18 +45,18 @@
             const displayInfo = () =>
             {
                 ctx.textAlign = 'left';
-                var txtSize = canvas.width/20;
+                let txtSize = canvas.width/20;
                 ctx.font = "bold "+txtSize+"px bold Arial";
                 ctx.fillStyle = "white";
                 ctx.fillText("Score: "+player.score,6,canvas.height-40,);
                 ctx.fillText("Level: "+gameState.level,6,canvas.height-15,);
-                for(var i=0; i<player.lives; i++){
+                for(let i=0; i<player.lives; i++){
                 	 ctx.drawImage(hearth, (canvas.width-canvas.width/15)-i*canvas.width/15, canvas.height-canvas.height/20, canvas.width/15, canvas.height/20);
                 }
             }
             
-            var left = false;
-    		var right = false;
+            let left = false;
+    		let right = false;
             
             const checkInput = () =>
             {
@@ -103,10 +103,10 @@
             
             const spawnFO = () =>
             {
-            	var rnd = Math.floor(Math.random() * 600)+1;
-            	var randomX = Math.floor(Math.random() * (canvas.width-canvas.width/10));
+            	let rnd = Math.floor(Math.random() * 600)+1;
+            	let randomX = Math.floor(Math.random() * (canvas.width-canvas.width/10));
             	if(rnd>=0 && rnd<=10*gameState.level){
-              	var r1= new PositiveObject(	randomX,0,
+              	let r1= new PositiveObject(	randomX,0,
               															canvas.width/10,canvas.height/13,
               															100,gameState.level*2,
               															rasberry, idCounter);
@@ -114,7 +114,7 @@
               	idCounter++;
             	}
             	if(rnd>=11*Math.pow(2,gameState.level) && rnd<=15*Math.pow(2,gameState.level)){
-            		var r1= new NegativeObject(	randomX,0,
+            		let r1= new NegativeObject(	randomX,0,
               															canvas.width/10,canvas.height/13,
               															gameState.level*2,
               															rock, idCounter);
@@ -130,7 +130,7 @@
                 	if(element.alive)
                 		element.drawFallingObject();
          	       	else{
-										var eID = element.id;
+										let eID = element.id;
 										fallingObjects = fallingObjects.filter(e => e.id != eID);
 										}
                 });   
@@ -172,7 +172,6 @@
            }
             const checkRestart = () => {
                document.addEventListener('keydown', (event) => {
-                console.log(event.keyCode);
                 if(event.keyCode == 32) {
                 	player.score=0;
                     player.lives=3;
@@ -199,7 +198,7 @@
                 }
                 else{
                     endScreen();
-                    window.requestAnimationFrame(draw);
+                    //window.requestAnimationFrame(draw);
                 }
                 
             }

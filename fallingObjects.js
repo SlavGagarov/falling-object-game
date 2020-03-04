@@ -27,15 +27,15 @@ class  FallingObject{
   
   
   checkPlayerCollisions(){
-	var pX=player.x+player.width*0.4;
-	var pW=player.width*0.2;
-	var pY=player.y;
-	var pH=player.height*0.8;
+	let pX=player.x+player.width*0.4;
+	let pW=player.width*0.2;
+	let pY=player.y;
+	let pH=player.height*0.8;
   
-	var tX=this.x;
-	var tW=this.width;
-	var tY=this.y;
-	var tH=this.height;
+	let tX=this.x;
+	let tW=this.width;
+	let tY=this.y;
+	let tH=this.height;
   	if(pX < tX + tW &&
   		pX + pW > tX &&
   		pY < tY + tH &&
